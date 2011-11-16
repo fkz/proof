@@ -23,7 +23,7 @@ public:
     //if (refCount <= 0)
     //  assert(0);
     if (!--refCount)
-      ;//delete this; TODO DEBugging out (MEMORY LEAK)
+      delete this;
   }
   
 protected:

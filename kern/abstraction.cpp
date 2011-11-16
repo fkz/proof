@@ -24,7 +24,7 @@ Element* Abstraction::replace(Element* with, int varId)
     return copy();
   }
   else {
-    return _clone(newTerm, newVar);
+    return _clone(newTerm, newVar)->copy();
   }
 }
 
@@ -38,7 +38,7 @@ Element* Abstraction::replaceNamed(Element* with, int T1, void* T2)
     return copy();
   }
   else {
-    return _clone(newTerm, newVar);
+    return _clone(newTerm, newVar)->copy();
   }
 }
 

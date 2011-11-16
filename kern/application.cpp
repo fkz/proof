@@ -12,7 +12,7 @@ Element* Application::replace(Element* with, int varId)
     return copy();
   }
   else {
-    return new Application(newF, newVar);
+    return (new Application(newF, newVar))->copy();
   }
 }
 
@@ -26,7 +26,7 @@ Element* Application::replaceNamed(Element* with, int T1, void* T2)
     return copy();
   }
   else {
-    return new Application(newF, newVar);
+    return (new Application(newF, newVar))->copy();
   }
 }
 
