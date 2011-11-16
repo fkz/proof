@@ -1,6 +1,5 @@
-#include "syntax.h"
+#include "kern/element_ptr.h"
 #include <iostream>
-#include "element.h"
 
 using namespace Creater;
 
