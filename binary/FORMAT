@@ -1,0 +1,40 @@
+2 Dateitypen: Binär und Namen.
+
+0x00   Magic [ 'CAS2' ]
+0x04   Version (x.x) = 0.1
+0x06   Typ (Binär=1, etc.)
+0x08   Anzahl Objekte
+0x0C   Zeiger auf erweiterte Struktur
+0x10   Liste der Objekte mit Addressen (Länge: 4*Anzahl Objekte)
+0xZZ   Start der Objekte...
+
+
+Objekte sehen folgendermaßen aus:
+Folge von Zahlen, kodiert wie UTF-8.
+
+Bedeutung:
+
+ungerade Zahlen:  Variablen
+
+Sonderzahlen (durch 4 teilbare Zahlen):
+                                                               Argumente
+0  reserviert (Fehler/ungültig/etc.)
+4  Application                                                 Term Var
+8  Function                                                    Var Term
+12 reserviert
+16 ForAll                                                      Var Term
+20 Annotation [ Zeiger auf Namen ] ; z. B. Name der
+          Variablen etc. (Debug Info/menschliche Info)         Term Debug
+24 Andere Daten                                                Term Data
+28 reserviert 
+32 reserviert
+36 reserviert
+40 reserviert
+44 reserviert
+48 reserviert
+52 reserviert
+56 reserviert
+60 reserviert
+
+durch 2, aber nicht durch 4 teilbare Zahlen; also 2, 6, 10, ... [insgesamt 32 passen in 1 Byte ] Zeiger auf Konstante Objekte, wobei nur auf solche mit
+kleinerer Nummer zugegriffen werden darf. Hierbei definieren 
