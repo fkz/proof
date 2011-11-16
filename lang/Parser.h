@@ -14,11 +14,14 @@ class Parser: public ParserBase
 {
         
     public:
-      Parser (std::istream &str);  
+      Parser (std::istream &str) : stream (str), lex_front(0) { };  
       
       int parse();
 
     private:
+      std::map< std::string, ElementPtr > eles;
+      int lex_front;
+      std::istream &stream;
       std::string literal (ElementPtr ptr);
       
         void error(char const *msg);    // called on (syntax) errors

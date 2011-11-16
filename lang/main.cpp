@@ -1,8 +1,8 @@
 #include "Parser.h"
 #include <fstream>
 
-int main () {
-  char *filename = "filename";
+int main (int argv, char **argc) {
+  char *filename = argc[1];
   std::fstream file (filename, std::fstream::in);
   Parser parser (file);
   std::cerr << "Parsing " << filename << std::endl;

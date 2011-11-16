@@ -23,7 +23,7 @@ public:
     //if (refCount <= 0)
     //  assert(0);
     if (!--refCount)
-      delete this;
+      ;//delete this;
   }
   
 protected:

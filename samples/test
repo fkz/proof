@@ -1,0 +1,12 @@
+nat := A: Set -> (A -> A) -> A -> A;
+O := A: Set => S: (A -> A) => o: A => o;
+S := pred: nat => A: Set => S': (A -> A) => o: A => pred A S' o;
+
+print nat;
+print O;
+print (S O);
+
+//hallo := A: Set => a1: A => a2: A => a1;
+
+
+//print hallo;
