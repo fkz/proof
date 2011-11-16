@@ -7,19 +7,38 @@ Element* Variable::type()
 
 Element* Variable::replace(Element* with, int varId)
 {
+  // type
+  Element* type2 = _type->replace (with, varId);
+  // ...
   if (varId <= index) {
-    if (varId == index)
+    if (varId == index) {
+      type2->remove();
       return with->copy();
+    }
     else
-      return (new Variable (index-1, _type->copy()))->copy();
+      return (new Variable (index-1, type2))->copy();
   }
-  else
-    return copy();
+  else {
+    if (type2 == _type) {
+      type2->remove();
+      return copy();
+    }
+    else {
+      return (new Variable (index, type2))->copy();
+    }
+  }
 }
 
 Element* Variable::replaceNamed(Element* with, int T1, void* T2)
 {
-  return copy();
+  Element* t2 = _type->replaceNamed(with, T1, T2);
+  if (t2 == _type) {
+    t2->remove();
+    return copy();
+  }
+  else {
+    return (new Variable (index, t2))->copy();
+  }
 }
 
 
