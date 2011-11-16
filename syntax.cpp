@@ -25,7 +25,7 @@ Element* Variable::replace(Element* with, int varId)
 Element* Variable::step(int from)
 {
   if (index >= from) {
-    return new Variable (index + 1, _type->copy());
+    return (new Variable (index + 1, _type->copy()))->copy();
   }
   return copy();
 }
@@ -50,6 +50,12 @@ bool Variable::check(std::vector< Element* >& vars)
     return false;
   return _type->equals(vars[vars.size()-index-1]);
 }
+
+Variable::~Variable()
+{
+  _type->remove();
+}
+
 
 
 
@@ -156,8 +162,16 @@ bool Application::check(std::vector< Element* >& vars)
 {
   if (!var->check(vars)) return false;
   if (!f->check(vars)) return false;
-  ForAll* all = f->type()->cast< ForAll >();
-  bool result = all->getVar()->type()->equals(var->type());
+  Element* t = f->type();
+  ForAll* all = t->cast< ForAll >();
+  t->remove();
+  Element* v = all->getVar();
+  Element* vtype = v->type();
+  Element* vartype = var->type();
+  bool result = vtype->equals(vartype);
+  v->remove();
+  vtype->remove();
+  vartype->remove();
   return result;
 }
 
@@ -284,54 +298,6 @@ void Application::toString(std::ostream& stream, std::vector< std::string >& str
   var->toString(stream, stringMapping, true);
   if (klammern) stream << ")";
 }
-
-namespace Creater{
-  
-Element *variable (int index, Element *type) {
-  return (new Variable (index, type->copy()))->copy();
-}
-
-Element *function (Element *var, Element *f) {
-  return (new Function (var->copy(), f->copy()))->copy();
-}
-
-Element *forAll (Element *var, Element *f) {
-  return (new ForAll (var->copy(), f->copy()))->copy();
-}
-
-Element *application (Element *f, Element *var) {
-  return (new Application (f->copy(), var->copy()))->copy();
-}
-
-Element* set()
-{
-  return (new TheTypeOfAllTypesTM())->copy();
-}
-
-Element* prop()
-{
-  return (new Prop())->copy();
-}
-
-
-void print (Element *ele) {
-  if (!ele->check ()) {
-    std::cout << "NOT VALID(!)" << std::endl;
-  }
-  else
-  {
-    std::vector< std::string > strings;
-    ele->toString(std::cout, strings, false);
-    std::cout << " of type ";
-    Element* tt = ele->type();
-    tt->toString(std::cout, strings, false);
-    tt->remove();
-    std::cout << std::endl;
-  }
-}
-  
-};
-
 
 
 

@@ -1,23 +1,24 @@
 #include "syntax.h"
 #include <iostream>
+#include "element.h"
 
 using namespace Creater;
 
 int main() {
-  Element* t = set();
+  ElementPtr t = set();
   print(t);
   
-  Element *f = forAll (variable (0, t), variable (1, t));
-  Element *f2 = forAll (t, f);
+  ElementPtr f = forAll (variable (0, t), variable (1, t));
+  ElementPtr f2 = forAll (t, f);
   print (f2);
   
-  Element *funq = function (prop(), 
+  
+  ElementPtr funq = function (prop(), 
 		   function (variable(0, prop()), variable(1, prop())));
   print (funq);
-  
-  Element *fun = function (t,
+  ElementPtr fun = function (t,
                   function (variable (0, t),
 	           function (variable (1, t),
-		    variable(0, variable(2, t->type())))));
+		    variable(0, variable(2, t.type())))));
   print(fun);
 }

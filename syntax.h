@@ -3,6 +3,7 @@
 #include <fstream>
 #include <vector>
 #include <typeinfo>
+#include <cassert>
 
 /**
  * @class Element
@@ -19,6 +20,8 @@ public:
   }
   
   void remove() {
+    //if (refCount <= 0)
+    //  assert(0);
     if (!--refCount)
       delete this;
   }
@@ -68,6 +71,7 @@ public:
   virtual bool isUsed(int index);
   virtual void toString(std::ostream& stream, std::vector< std::string >& stringMapping, bool klammern);
   virtual bool check(std::vector< Element* >& vars);
+  virtual ~Variable();
 };
 
 class Application: public Element {
@@ -174,19 +178,5 @@ T* Element::cast()
     result = ele->cast< T > ();
     ele->remove ();
   }
-  return static_cast< T * > (result->copy());
+  return dynamic_cast< T * > (result->copy());
 }
-
-
-namespace Creater{
-  
-Element *variable (int index, Element *type);
-Element *function (Element *var, Element *f);
-Element *forAll (Element *var, Element *f);
-Element *application (Element *f, Element *var);
-Element *set ();
-Element *prop ();
-
-void print (Element *e);
-
-};
