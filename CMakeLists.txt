@@ -1,10 +1,10 @@
 project(my_proof)
 
-add_definitions(-Wall)
+add_definitions(-Wall -O3 -g)
 
 include_directories(.)
 
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE RelWithDebInfo)
 
 
 add_subdirectory(lang)

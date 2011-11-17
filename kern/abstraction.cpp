@@ -1,4 +1,5 @@
 #include "abstraction.h"
+#include "element_cast.h"
 
 Element* Abstraction::step(int from)
 {
@@ -83,9 +84,11 @@ Abstraction::~Abstraction()
 
 bool Abstraction::equals(Element* ele2) 
 {
-  Abstraction *e = dynamic_cast< Abstraction * > (ele2);  
-  if (!e) { return ele2->equals_ex(this); }
-  return term->equals(e->term) && var->equals(e->var) && typeid(e) == typeid(this);
+  Abstraction *e = ele2->cast< Abstraction > ();  
+  if (!e)  return false;
+  bool result = term->equals(e->term) && var->equals(e->var) && typeid(e) == typeid(this);
+  e->remove();
+  return result;
 }
 
 bool Abstraction::check(std::vector< Element* >& vars)

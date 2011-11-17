@@ -1,6 +1,7 @@
 #pragma once
 #include "../simple_element.h"
 #include "unknown.h"
+#include "../element_cast.h"
 
 template< class Str >
 class NamedVar: public SimpleElement {
@@ -22,11 +23,14 @@ public:
   }
   
   virtual bool equals(Element* ele2) {
-    NamedVar *result = dynamic_cast< NamedVar * > (ele2);
-    if (result)
-      return result->str == str;
+    NamedVar *result = ele2->cast< NamedVar > ();
+    if (result) {
+      bool res = result->str == str;
+      result->remove();
+      return res;
+    }
     else
-      return ele2->equals_ex(this);
+      return false;
   }
   virtual Element* replaceNamed(Element* with, int T1, void* T2) {
     if (T1 == 5) {

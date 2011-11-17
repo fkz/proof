@@ -1,4 +1,5 @@
 #include "variable.h"
+#include "element_cast.h"
 
 Element* Variable::type()
 {
@@ -63,9 +64,11 @@ Element* Variable::clone()
 
 bool Variable::equals(Element* ele2)
 {
-  Variable* e = dynamic_cast< Variable * > (ele2);
-  if (!e) return ele2->equals_ex (this);
-  return index == e->index;
+  Variable* e = ele2->cast< Variable > ();
+  if (!e) return false;
+  bool result = index == e->index;
+  e->remove();
+  return result;
 }
 
 bool Variable::check(std::vector< Element* >& vars)

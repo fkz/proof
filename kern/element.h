@@ -8,7 +8,7 @@
 /**
  * @class Element
  * Represents a syntactic element in the tree
- * Should not be altered, unless locked
+ * Should not be altered (normally)
  */
 class Element {
 private:
@@ -46,6 +46,9 @@ public:
     return check(e);
   }
   
+  virtual Element *apply() {
+    return 0;
+  }
   virtual Element *applyRecursive () = 0;
   virtual bool check(std::vector< Element * > &vars) = 0;  
   virtual Element *step (int from) = 0;
@@ -54,7 +57,6 @@ public:
   virtual Element *clone() = 0;  
   virtual Element *type() = 0;
   virtual bool equals (Element *ele2) = 0;
-  virtual bool equals_ex(Element* ele2) { return false;}
   
   ///For the conversion phase, this replacements can be used (not used in any checking)
   virtual Element *replaceNamed (Element *with, int T1, void *T2) = 0;
@@ -81,7 +83,11 @@ public:
     virtual Element* step(int from) { return copy(); }
     virtual void toString(std::ostream& stream, std::vector< std::string >& stringMapping, bool klammern) { stream << "SET"; }
     virtual Element* type() { return copy(); } //!!!!! THIS IS PROBABLY INCONSISTENT 
-    virtual bool equals(Element* ele2) { return typeid(*this)==typeid(*ele2) || equals_ex(ele2); }
+    virtual bool equals(Element* ele2) { 
+        TheTypeOfAllTypesTM* cc = ele2->cast< TheTypeOfAllTypesTM >();
+	if (cc) cc->remove();
+	return cc;
+    }
     virtual Element* replaceNamed(Element* with, int T1, void* T2) { return copy(); }
     virtual bool equals_really(Element* ele2) { return equals(ele2); } 
     virtual Element* applyRecursive() { return copy(); }
@@ -97,7 +103,11 @@ public:
     virtual Element* step(int from) { return copy(); }
     virtual void toString(std::ostream& stream, std::vector< std::string >& stringMapping, bool klammern) { stream << "PROP"; }
     virtual Element* type() { return (new TheTypeOfAllTypesTM())->copy(); } 
-    virtual bool equals(Element* ele2) { return typeid(*ele2) == typeid(Prop) || equals_ex(ele2); }
+    virtual bool equals(Element* ele2) { 
+        Prop* result = ele2->cast< Prop >();
+	if (result) result->remove();
+	return result;
+    }
     virtual Element* replaceNamed(Element* with, int T1, void* T2) { return copy(); }
     virtual bool equals_really(Element* ele2) { return equals (ele2); }
     virtual Element* applyRecursive() { return copy(); }

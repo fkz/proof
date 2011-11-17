@@ -119,7 +119,9 @@ Element* Application::apply()
 bool Application::equals(Element* ele2)
 {
   Application *e = dynamic_cast< Application * > (ele2);
-  if (!e) { return equals_ex (ele2); }
+  if (!e) {
+    return equals_ex (ele2); 
+  }
   bool result = f->equals (e->f) && var->equals(e->var);
   if (result)
     return true;
