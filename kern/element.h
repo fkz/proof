@@ -36,6 +36,8 @@ public:
     Element* t = type();
     Element* t2 = ele2->type();
     bool result = t->equals_really(t2);
+    t->remove();
+    t2->remove();
     return result && equals(ele2);
   }
   

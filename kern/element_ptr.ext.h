@@ -12,7 +12,9 @@ ElementPtr namedVariable (const Str &string) {
 template< class Str >
 ElementPtr namedFunction (const Str &string, ElementPtr var, ElementPtr f) {
   ElementPtr f1 = f->step(0);
-  ElementPtr f3 = f1->replaceNamed (variable(0, var)->copy(), 5, const_cast< Str * > (&string));
+  Element *ecopy = variable(0, var)->copy();
+  ElementPtr f3 = f1->replaceNamed (ecopy, 5, const_cast< Str * > (&string));
+  ecopy->remove();
   return function(var, f3);
 }
 

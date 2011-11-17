@@ -94,6 +94,7 @@ bool Application::check(std::vector< Element* >& vars)
   bool result = vtype->equals(vartype);
   vtype->remove();
   vartype->remove();
+  all->remove();
   return result;
 }
 
@@ -129,10 +130,14 @@ bool Application::equals(Element* ele2)
 bool Application::equals_ex(Element* ele2)
 {
   Element *simplified = apply();
-  if (simplified)
-    return simplified->equals(ele2);
+  bool result;
+  if (simplified) {
+    result = simplified->equals(ele2);
+    simplified->remove();    
+  }
   else
-    return false;
+    result = false;
+  return result;
 }
 
 
@@ -141,7 +146,7 @@ Element* Application::type()
 {
   Element *t = f->type();
   ForAll* ft = t->cast< ForAll > (); 
-  
+  t->remove();
   Element* result = ft->getTerm();
   Element* result2 = result->replace(var, 0);
   ft->remove();
