@@ -46,7 +46,7 @@ Element* Variable::replaceNamed(Element* with, int T1, void* T2)
 Element* Variable::step(int from)
 {
   if (index >= from) {
-    return (new Variable (index + 1, _type->copy()))->copy();
+    return (new Variable (index + 1, _type->step(from)))->copy();
   }
   return copy();
 }
