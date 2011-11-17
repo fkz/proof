@@ -10,13 +10,18 @@ Element* Abstraction::step(int from)
     return copy();
   }
   else {
-    return _clone(newTerm, newVar)->copy();
+    Element* result = _clone(newTerm, newVar)->copy();
+    newTerm->remove();
+    newVar->remove();
+    return result;
   }
 }
 
 Element* Abstraction::replace(Element* with, int varId)
 {
-  Element *newTerm = term->replace(with->step(0), varId+1);
+  Element* stp = with->step(0);
+  Element *newTerm = term->replace(stp, varId+1);
+  stp->remove();
   Element *newVar = var->replace(with, varId);
   if (newTerm == term && newVar == var) {
     newTerm->remove();
@@ -24,13 +29,18 @@ Element* Abstraction::replace(Element* with, int varId)
     return copy();
   }
   else {
-    return _clone(newTerm, newVar)->copy();
+    Element* result = _clone(newTerm, newVar)->copy();
+    newTerm->remove();
+    newVar->remove();
+    return result;
   }
 }
 
 Element* Abstraction::replaceNamed(Element* with, int T1, void* T2)
 {
-  Element *newTerm = term->replaceNamed(with->step(0), T1, T2);
+  Element* stp = with->step(0);
+  Element *newTerm = term->replaceNamed(stp, T1, T2);
+  stp->remove();
   Element *newVar = var->replaceNamed(with, T1, T2);
   if (newTerm == term && newVar == var) {
     newTerm->remove();
@@ -60,8 +70,7 @@ Element* Abstraction::applyRecursive()
 
 Element* Abstraction::clone()
 {
-  //TODO: hier ist glaub ich copy zu viel (bzw. in _clone)
-  return _clone (term->copy(), var->copy());
+  return _clone (term, var);
 }
 
 
@@ -110,7 +119,7 @@ Element* ForAll::type()
 
 Abstraction* Function::_clone(Element* newTerm, Element* newVar)
 {
-  return new Function(newVar->clone(), newTerm->clone());
+  return new Function(newVar->copy(), newTerm->copy());
 }
 
 Element* Function::type()

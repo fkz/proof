@@ -8,6 +8,14 @@ I: True := (A: Set) (a: A) => a;
 CheckI ? I ? I True I;
 CheckI2 ? I ? I Set True;
 
+bool := (A: Set) -> A -> A -> A;
+false: bool := (A: Set) (a b: A) => a;
+true: bool := (A: Set) (a b: A) => b;
+not: bool -> bool := (b: bool) => b bool true false;
+
+//Check ? not false ? not (not true);
+
+
 nat := (A: Set) -> (A -> A) -> A -> A;
 O: nat := (A: Set) (s: A -> A) (o: A) => o;
 S: nat -> nat := (pred: nat) (A: Set) (s: A -> A) (o: A) => s (pred A s o);
@@ -15,16 +23,23 @@ S: nat -> nat := (pred: nat) (A: Set) (s: A -> A) (o: A) => s (pred A s o);
 1': nat := (A: Set) (s: A -> A) (o: A) => s o;
 2: nat := S (S O);
 
-1eq1' ? 1 ? 1';
-print ? 1';
-print ? 1;
+pair: Set -> Set -> Set := (A: Set) => (B: Set) => (s: Set) -> (A -> B -> s) -> s;
+mkpair: (A: Set) (B: Set) -> A -> B -> pair A B := (A: Set) (B: Set) (a: A) (b: B) => (s: Set) (z: A -> B -> s) => z a b;
+first: (A: Set) (B: Set) -> pair A B -> A := (A: Set) (B: Set) (p: pair A B) => p A ((a: A) (b: B) => a);
+second: (A: Set) (B: Set) -> pair A B -> B := (A: Set) (B: Set) (p: pair A B) => p B ((a: A) (b: B) => b);
 
-vorgaenger: nat -> nat := (n: nat) => n nat ((x: nat) => x) O;
+//1eq1' ? 1 ? 1';
+//print ? 1';
+//print ? 1;
+
+vorgaenger: nat -> nat := (n: nat) => first nat bool (n (pair nat bool) ((x: pair nat bool) => mkpair nat bool ((second nat bool x) nat O (S (first nat bool x))) true) (mkpair nat bool O false));
 v0: nat := vorgaenger O;
 
 10 ? 1 ? O;
 1v0 ? 1 ? vorgaenger 2;
+1v1 ? 2 ? vorgaenger 2;
+0v0 ? O ? vorgaenger O;
 
 klar := O nat ((x: nat) => x) O;
 
-CheckO ? O ? klar;
+//CheckO ? O ? klar;

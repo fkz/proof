@@ -100,7 +100,7 @@ bool Application::check(std::vector< Element* >& vars)
 
 Element* Application::clone()
 {
-  return new Application (f->clone(), var->clone());
+  return new Application (f->copy(), var->copy());
 }
 
 Element* Application::apply()

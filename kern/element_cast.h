@@ -12,8 +12,9 @@ T* Element::cast()
     Element* ele = appl->apply();
     if (!ele)
       return 0;
-    result = ele->cast< T > (); //TODO dont copy twice
+    result = ele->cast< T > ();
     ele->remove ();
+    return result;
   }
   return dynamic_cast< T * > (result->copy());
 }
