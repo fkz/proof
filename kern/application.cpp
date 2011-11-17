@@ -140,7 +140,8 @@ bool Application::equals_ex(Element* ele2)
 Element* Application::type()
 {
   Element *t = f->type();
-  ForAll* ft = dynamic_cast< ForAll * > (t); 
+  ForAll* ft = t->cast< ForAll > (); 
+  
   Element* result = ft->getTerm();
   Element* result2 = result->replace(var, 0);
   ft->remove();
