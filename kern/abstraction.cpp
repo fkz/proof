@@ -10,7 +10,7 @@ Element* Abstraction::step(int from)
     return copy();
   }
   else {
-    return _clone(newTerm, newVar);
+    return _clone(newTerm, newVar)->copy();
   }
 }
 
@@ -45,6 +45,7 @@ Element* Abstraction::replaceNamed(Element* with, int T1, void* T2)
 
 Element* Abstraction::clone()
 {
+  //TODO: hier ist glaub ich copy zu viel (bzw. in _clone)
   return _clone (term->copy(), var->copy());
 }
 

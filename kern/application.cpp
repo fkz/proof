@@ -47,7 +47,7 @@ Element* Application::step(int from)
     return copy();
   }
   else {
-    return new Application(newF, newVar);
+    return (new Application(newF, newVar))->copy();
   }
 }
 

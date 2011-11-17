@@ -74,7 +74,7 @@ int Parser::lex()
 
 void Parser::setLiteral(std::string arg1)
 {
-  d_val__ = (new NamedVar< std::string > (arg1))->copy();
+  d_val__ = Creater::namedVariable (arg1);
 }
 
 

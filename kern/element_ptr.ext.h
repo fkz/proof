@@ -6,7 +6,7 @@ namespace Creater {
 
 template< class Str >
 ElementPtr namedVariable (const Str &string) {
-  return (new NamedVar<Str> (string))->clone();
+  return (new NamedVar<Str> (string))->copy();
 }
 
 template< class Str >
