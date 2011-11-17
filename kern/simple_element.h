@@ -20,4 +20,7 @@ class SimpleElement: public Element {
   virtual Element* replaceNamed(Element* with, int T1, void* T2) {
     return copy();
   }
+  virtual Element* applyRecursive() {
+    return copy();
+  }
 };

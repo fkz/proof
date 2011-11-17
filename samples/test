@@ -1,12 +1,30 @@
-nat := A: Set -> (A -> A) -> A -> A;
-O := A: Set => S: (A -> A) => o: A => o;
-S := pred: nat => A: Set => S': (A -> A) => o: A => pred A S' o;
+False := (A: Set) -> A;
+True := (A: Set) -> A -> A;
+I: True := (A: Set) (a: A) => a;
+//I2 := I;
+//Hallo ? I ? True;
 
-print nat;
-print O;
-print (S O);
+//print I True I;
+CheckI ? I ? I True I;
+CheckI2 ? I ? I Set True;
 
-//hallo := A: Set => a1: A => a2: A => a1;
+nat := (A: Set) -> (A -> A) -> A -> A;
+O: nat := (A: Set) (s: A -> A) (o: A) => o;
+S: nat -> nat := (pred: nat) (A: Set) (s: A -> A) (o: A) => s (pred A s o);
+1: nat := S O;
+1': nat := (A: Set) (s: A -> A) (o: A) => s o;
+2: nat := S (S O);
 
+1eq1' ? 1 ? 1';
+print ? 1';
+print ? 1;
 
-//print hallo;
+vorgaenger: nat -> nat := (n: nat) => n nat ((x: nat) => x) O;
+v0: nat := vorgaenger O;
+
+10 ? 1 ? O;
+1v0 ? 1 ? vorgaenger 2;
+
+klar := O nat ((x: nat) => x) O;
+
+CheckO ? O ? klar;

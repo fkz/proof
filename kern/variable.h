@@ -12,6 +12,7 @@ protected:
   virtual Element* replaceNamed(Element* with, int T1, void* T2);
   virtual Element* step(int from);
   virtual Element* clone();
+  virtual Element* applyRecursive();
   virtual bool equals(Element* ele2);
 public:
   Variable (int index, Element *type) : index(index), _type(type) { }

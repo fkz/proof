@@ -36,6 +36,12 @@ ElementPtr prop()
   return (new Prop())->copy();
 }
 
+ElementPtr unknown()
+{
+  return (new Unknown)->copy();
+}
+
+
 
 
 void print (ElementPtr ele) {

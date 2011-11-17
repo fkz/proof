@@ -23,7 +23,7 @@ public:
     //if (refCount <= 0)
     //  assert(0);
     if (!--refCount)
-      delete this;
+      ;//delete this;
   }
   
 protected:
@@ -32,10 +32,19 @@ protected:
     /// Should remove all elements in connection to this
   virtual ~Element() { }
 public:
+  virtual bool equals_really(Element *ele2) {
+    Element* t = type();
+    Element* t2 = ele2->type();
+    bool result = t->equals_really(t2);
+    return result && equals(ele2);
+  }
+  
   bool check() {
     std::vector< Element * > e;
     return check(e);
   }
+  
+  virtual Element *applyRecursive () = 0;
   virtual bool check(std::vector< Element * > &vars) = 0;  
   virtual Element *step (int from) = 0;
   virtual Element *replace (Element *with, int varId) = 0;
@@ -72,6 +81,8 @@ public:
     virtual Element* type() { return copy(); } //!!!!! THIS IS PROBABLY INCONSISTENT 
     virtual bool equals(Element* ele2) { return typeid(*this)==typeid(*ele2) || equals_ex(ele2); }
     virtual Element* replaceNamed(Element* with, int T1, void* T2) { return copy(); }
+    virtual bool equals_really(Element* ele2) { return equals(ele2); } 
+    virtual Element* applyRecursive() { return copy(); }
     TheTypeOfAllTypesTM() {}
 };
 
@@ -86,5 +97,7 @@ public:
     virtual Element* type() { return (new TheTypeOfAllTypesTM())->copy(); } 
     virtual bool equals(Element* ele2) { return typeid(*ele2) == typeid(Prop) || equals_ex(ele2); }
     virtual Element* replaceNamed(Element* with, int T1, void* T2) { return copy(); }
+    virtual bool equals_really(Element* ele2) { return equals (ele2); }
+    virtual Element* applyRecursive() { return copy(); }
     Prop() {}  
 };

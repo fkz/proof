@@ -9,6 +9,7 @@
     // required for the compilation of Parser's sources.
 
 #include "kern/element_ptr.ext.h"
+#include "additional_elements.h"
 
 
     // UN-comment the next using-declaration if you want to use

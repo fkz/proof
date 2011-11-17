@@ -2,6 +2,7 @@
 #include "kern/element_ptr.h"
 #include <kern/ext/named_var.h>
 #include "kern/element_ptr.ext.h"
+#include "additional_elements.h"
 
 
 int Parser::lex()
@@ -27,7 +28,10 @@ int Parser::lex()
 	l2 = stream.get();
 	if (l2 == '/') {
 	  //Kommentar
-	  while (stream.get() != '\n');
+	  while (stream.get() != '\n') {
+	    if (stream.eof())
+	      break;
+	  }
 	  continue;
 	}
 	else {
@@ -42,6 +46,7 @@ int Parser::lex()
       case '(':
       case ')':
       case ';':
+      case '?':
 	return l1;
       case '-':
       case '=':
@@ -58,19 +63,24 @@ int Parser::lex()
 	}
 	lex_front = l2;
 	if (literal == "print") return PRINT;
-	if (literal == "Set") 
-	  d_val__ = Creater::set();
-	else {
-	  std::map< std::string, ElementPtr >::iterator it = eles.find(literal);
-	  if (it == eles.end())
-	    d_val__ = Creater::namedVariable (literal);
-	  else
-	    d_val__ = it->second;
-	}
+	d_val__ = (new Literal (literal))->copy();
 	return LITERAL;
     }
   }
 }
+
+ElementPtr Parser::evaluate(const std::string& string)
+{
+  if (string == "Set")
+    return Creater::set();
+  
+  std::map< std::string, ElementPtr >::iterator it = eles.find(string);
+  if (it == eles.end())
+    return Creater::namedVariable(string);
+  else
+    return it->second;
+}
+
 
 void Parser::setLiteral(std::string arg1)
 {
@@ -82,4 +92,24 @@ std::string Parser::literal(ElementPtr ptr)
 {
   NamedVar< std::string > &a = dynamic_cast< NamedVar< std::string > & > (*ptr);
   return a.name();
+}
+
+ElementPtr Parser::buildForAlls(ElementPtr& vars, ElementPtr& aussage)
+{
+  std::list< std::pair< std::string, ElementPtr > > varList = ArgumentList::getList(vars);
+  ElementPtr fun = aussage;
+  for (std::list< std::pair< std::string, ElementPtr > >::reverse_iterator it = varList.rbegin(); it != varList.rend(); ++it) {
+    fun = Creater::namedForAll (it->first, it->second, fun);
+  }
+  return fun;
+}
+
+ElementPtr Parser::buildFunctions(ElementPtr& vars, ElementPtr& aussage)
+{
+  std::list< std::pair< std::string, ElementPtr > > varList = ArgumentList::getList(vars);
+  ElementPtr fun = aussage;
+  for (std::list< std::pair< std::string, ElementPtr > >::reverse_iterator it = varList.rbegin(); it != varList.rend(); ++it) {
+    fun = Creater::namedFunction (it->first, it->second, fun);
+  }
+  return fun;
 }

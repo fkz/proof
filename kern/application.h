@@ -9,6 +9,7 @@ protected:
   virtual Element* type();
   virtual Element* replace(Element* with, int varId);
   virtual Element* replaceNamed(Element* with, int T1, void* T2);
+  virtual Element* applyRecursive();
   virtual Element* step(int from);
   virtual ~Application();
   virtual Element* clone();

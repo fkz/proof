@@ -50,6 +50,12 @@ Element* Variable::step(int from)
   return copy();
 }
 
+Element* Variable::applyRecursive()
+{
+  return copy();
+}
+
+
 Element* Variable::clone()
 {
   return new Variable(index, _type->copy());

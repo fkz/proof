@@ -10,7 +10,9 @@ T* Element::cast()
     if (!appl)
       return 0;
     Element* ele = appl->apply();
-    result = ele->cast< T > ();
+    if (!ele)
+      return 0;
+    result = ele->cast< T > (); //TODO dont copy twice
     ele->remove ();
   }
   return dynamic_cast< T * > (result->copy());

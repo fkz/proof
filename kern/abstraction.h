@@ -13,6 +13,7 @@ protected:
   virtual Element* clone();
   virtual  Abstraction *_clone(Element* newTerm, Element* newVar) = 0;
   virtual bool equals(Element* ele2);
+  virtual Element* applyRecursive();
   Abstraction (Element *var, Element *term) : var(var), term(term) { }
   virtual bool check(std::vector< Element* >& vars);
 public:

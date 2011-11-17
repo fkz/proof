@@ -17,6 +17,9 @@ class Parser: public ParserBase
       Parser (std::istream &str) : stream (str), lex_front(0) { };  
       
       int parse();
+      ElementPtr buildForAlls(ElementPtr &vars, ElementPtr &aussage);
+      ElementPtr buildFunctions(ElementPtr &vars, ElementPtr &aussage);
+      ElementPtr evaluate (const std::string &string);
 
     private:
       std::map< std::string, ElementPtr > eles;
