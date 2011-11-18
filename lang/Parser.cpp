@@ -3,6 +3,7 @@
 #include <kern/ext/named_var.h>
 #include "kern/element_ptr.ext.h"
 #include "additional_elements.h"
+#include <kern/constant.h>
 
 
 int Parser::lex()
@@ -93,6 +94,21 @@ std::string Parser::literal(ElementPtr ptr)
   NamedVar< std::string > &a = dynamic_cast< NamedVar< std::string > & > (*ptr);
   return a.name();
 }
+
+void Parser::set(const std::string& name, ElementPtr ele, ElementPtr type, bool unfoldable)
+{
+  int unique = names.size();
+  names.push_back(name);
+  Element *mtype;
+  if (!&*type)
+    mtype = ele->type();
+  else
+    mtype = type->copy();
+
+  eles[ name ] = (new Constant (unique, mtype, name, unfoldable ? 0 : ele->copy()))->copy();
+}
+
+
 
 ElementPtr Parser::buildForAlls(ElementPtr& vars, ElementPtr& aussage)
 {

@@ -6,9 +6,10 @@ private:
   Element *_type;
   Element *unfold;
   int unique_id;
+  std::string str;
 public:
-  Constant (int unique, Element *type, Element *unfold = 0) 
-  : unique_id(unique), _type(type), unfold(unfold) { }
+  Constant (int unique, Element *type, const std::string &str, Element *unfold = 0) 
+  : unique_id(unique), _type(type), unfold(unfold), str(str) { }
   
   virtual bool check(std::vector< Element* >& vars);
   virtual Element* applyRecursive();

@@ -20,9 +20,11 @@ class Parser: public ParserBase
       ElementPtr buildForAlls(ElementPtr &vars, ElementPtr &aussage);
       ElementPtr buildFunctions(ElementPtr &vars, ElementPtr &aussage);
       ElementPtr evaluate (const std::string &string);
+      void set (const std::string &name, ElementPtr ele, ElementPtr type = ElementPtr(), bool unfoldable = false);
 
     private:
       std::map< std::string, ElementPtr > eles;
+      std::vector< std::string > names;
       int lex_front;
       std::istream &stream;
       std::string literal (ElementPtr ptr);

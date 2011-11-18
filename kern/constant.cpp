@@ -1,4 +1,5 @@
 #include "constant.h"
+#include "element_cast.h"
 
 bool Constant::check(std::vector< Element* >& vars)
 {
@@ -16,7 +17,7 @@ bool Constant::check(std::vector< Element* >& vars)
 }
 
 Element* Constant::clone() {
-  return new Constant (unique_id, _type->copy(), unfold ? unfold->copy() : 0);
+  return new Constant (unique_id, _type->copy(), str, unfold ? unfold->copy() : 0);
 }
 
 bool Constant::equals(Element* ele2) {
@@ -42,7 +43,7 @@ bool Constant::equals(Element* ele2) {
 Element* Constant::applyRecursive()
 {
   if (unfold)
-    return unfold->copy();
+    return unfold->applyRecursive();
   else
     return copy();
 }
@@ -69,10 +70,11 @@ Element* Constant::step(int from)
 
 void Constant::toString(std::ostream& stream, std::vector< std::string >& stringMapping, bool klammern)
 {
-  stream << "CONST[" << unique_id << "]{";
+  stream << str;
+  /*stream << "CONST[" << unique_id << "]{";
   if (unfold)
     unfold->toString(stream, stringMapping, false);
-  stream << "}";
+  stream << "}";*/
 }
 
 Element* Constant::type()
@@ -82,7 +84,10 @@ Element* Constant::type()
 
 Element* Constant::apply()
 {
-  return unfold->copy();
+  if (unfold)
+    return unfold->copy();
+  else
+    return 0;
 }
 
 

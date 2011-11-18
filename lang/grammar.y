@@ -11,14 +11,16 @@
 %%
 
 definitions: 
-| definitions LITERAL ZUWEISUNG aussage ';' { if (!$4->check()) { std::cerr << "error defining " << Literal::from ($2) << std::endl; } eles[Literal::from ($2)] = $4; }
+| definitions LITERAL ZUWEISUNG aussage ';' { if (!$4->check()) { std::cerr << "error defining " << Literal::from ($2) << std::endl; } set (Literal::from ($2), $4); }
+| definitions LITERAL ':' ZUWEISUNG aussage ';' { if (!$5->check()) { std::cerr << "error defining " << Literal::from ($2) << std::endl; } set (Literal::from ($2), $5, 0, true); }
+| definitions LITERAL ':' aussage ';' { if (!$4->check()) { std::cerr << "error defining axiom " << Literal::from ($2) << std::endl; } set (Literal::from($2), 0, $4, true); }
 | definitions PRINT aussage ';' { Creater::print($3); }
 | definitions PRINT '?' aussage ';' { if ($4->check()) { Creater::print ($4->applyRecursive()); } }
 | definitions LITERAL ':' aussage ZUWEISUNG aussage ';' {
   if (!$6->check()) { std::cerr << "error defining " << Literal::from ($2) << " (no valid definition)" << std::endl; }
   if (!$4->check()) { std::cerr << "error defining " << Literal::from ($2) << " (no valid type)" << std::endl; }
   if ($6->check() && $4->check() && !$4->equals_really($6->type())) { std::cerr << "error defining " << Literal::from ($2) << " (types differ)" << std::endl; }
-  else eles[Literal::from ($2)] = $6;
+  else set (Literal::from ($2), $6, $4);
 }
 | definitions LITERAL '?' aussage '?' aussage ';' { 
   if (!$4->check()) { std::cerr << "error comparing " << Literal::from ($2) << " (left side wrong)" << std::endl; }
