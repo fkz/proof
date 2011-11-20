@@ -76,12 +76,14 @@ void Parser::doChecking(ElementPtr& type, ElementPtr& term, const std::string &s
 {
   ElementPtr term_type = term->type();
   std::vector< std::pair< Unknown *, Element * > > unknowns;
-  if (!term_type->compare(&*type, unknowns)) {
+  Element *type_ = type->copy();
+  term_type = term_type->compare(type_, unknowns);
+  type = type_;
+  if (!&*term_type) {
     std::cerr << "Comparing fails (defining " << str << ")" << std::endl;
   }
 
   for (std::vector< std::pair< Unknown*, Element* > >::iterator it = unknowns.begin(); it != unknowns.end(); ++it) {
-    type = type->replaceNamed(it->second, Unknown::REPLACE_ELEMENT, it->first);
     term = term->replaceNamed(it->second, Unknown::REPLACE_ELEMENT, it->first);
     (ElementPtr)it->first;
     (ElementPtr)it->second;

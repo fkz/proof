@@ -3,7 +3,7 @@
 #include <vector>
 #include "element_cast.h"
 
-bool Element::compare(Element* _ele, std::vector< std::pair< Unknown*, Element* > >& unknwons)
+Element *Element::compare(Element *&_ele, std::vector< std::pair< Unknown*, Element* > >& unknwons)
 {
   Unknown *unkT;
   bool not_finnished = true;
@@ -24,7 +24,9 @@ bool Element::compare(Element* _ele, std::vector< std::pair< Unknown*, Element* 
   }
   if (unkT) {
     unknwons.push_back(std::make_pair (unkT, copy()));
-    return true;
+    _ele->remove();
+    _ele = copy();
+    return copy();
   }
 
   _compare(_ele, unknwons);  

@@ -110,22 +110,31 @@ std::ostream &operator << (std::ostream &stream, const Error &) { stream << "ERR
 
 
 
-bool Abstraction::_compare(Element* _ele, std::vector< std::pair< Unknown*, Element* > >& unknwons)
+Element *Abstraction::_compare(Element*& _ele, std::vector< std::pair< Unknown*, Element* > >& unknwons)
 {
   Abstraction *e = _ele->cast< Abstraction > ();
   if (!e)
-    return false;
-
-  bool result1 = var->compare(e->var, unknwons);
-  if (!result1)
-    return false;
+    return 0;
+  
+  _ele->remove();
+  
+  Abstraction *_ele_clone;
+  _ele = (_ele_clone = _clone(e->term, e->var))->copy();
+  e->remove();
+  
+  Element* var_copy = var->compare(_ele_clone->var, unknwons);
+  if (!var_copy) {
+    return 0;
+  }
   
   for (std::vector< std::pair< Unknown*, Element* > >::iterator it = unknwons.begin(); it != unknwons.end(); ++it) {
     Element* t = it->second->step(0);
     it->second->remove();
     it->second = t;
   }
-  bool result = term->compare(e->term, unknwons);
+  Element *term_copy = term->compare(_ele_clone->term, unknwons);
+  if (!term_copy)
+    return 0;
   Element *error = new NamedVar<Error>(Error());
   error->copy();
   for (std::vector< std::pair< Unknown*, Element* > >::iterator it = unknwons.begin(); it != unknwons.end(); ++it) {
@@ -133,9 +142,12 @@ bool Abstraction::_compare(Element* _ele, std::vector< std::pair< Unknown*, Elem
     it->second->remove();;
     it->second = t;
   }
-  e->remove();
+  
   error->remove();
-  return result;
+  Abstraction* result = _clone(term_copy, var_copy);
+  term_copy->remove();
+  var_copy->remove();
+  return result->copy();
 }
 
 

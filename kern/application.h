@@ -10,7 +10,7 @@ protected:
   virtual Element* type();
   virtual Element* replace(Element* with, int varId);
   virtual Element* replaceNamed(Element* with, int T1, void* T2);
-  virtual bool _compare(Element* _ele, std::vector< std::pair< Unknown*, Element* > > &unknwons);
+    Element* _compare(Element*& _ele, std::vector< std::pair< Unknown*, Element* > >& unknwons);
   virtual Element* applyRecursive();
   virtual Element* step(int from);
   virtual ~Application();

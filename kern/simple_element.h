@@ -30,7 +30,7 @@ class SimpleElement: public Element {
   virtual Element* applyRecursive() {
     return copy();
   }
-  virtual bool _compare(Element* _ele, std::vector< std::pair< Unknown*, Element* > > &unknwons) {
-    return equals(_ele);
+  virtual Element *_compare(Element*& _ele, std::vector< std::pair< Unknown*, Element* > > &unknwons) {
+    return equals(_ele) ? copy() : 0;
   }
 };

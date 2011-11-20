@@ -45,24 +45,28 @@ bool Constant::equals(Element* ele2) {
   }
 }
 
-bool Constant::_compare(Element* _ele, std::vector< std::pair< Unknown*, Element* > >& unknwons)
+Element* Constant::_compare(Element*& _ele, std::vector< std::pair< Unknown*, Element* > >& unknwons)
 {
   Constant *ele = _ele->cast<Constant> ();
   if (!ele) {
     if (unfold)
       return unfold->compare(_ele, unknwons);
     else
-      return false;
+      return 0;
   }
   else {
     if (ele->unique_id == unique_id)
-      return true;
+      return copy();
     if (unfold)
       return unfold->compare(_ele, unknwons);
-    else if (ele->unfold)
-      return ele->unfold->compare(this, unknwons);
+    else if (ele->unfold) {
+      Element *result = this;
+      _ele->remove();
+      _ele = ele->unfold->compare(result, unknwons);
+      return result;
+    }
     else
-      return false;
+      return 0;
   }
 }
 

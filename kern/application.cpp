@@ -129,25 +129,36 @@ bool Application::equals(Element* ele2)
     return equals_ex(ele2);
 }
 
-bool Application::_compare(Element* _ele, std::vector< std::pair< Unknown*, Element* > >& unknwons)
+Element *Application::_compare(Element*& _ele, std::vector< std::pair< Unknown*, Element* > >& unknwons)
 {
   Application *e = _ele->cast< Application > ();
   if (e) {
+    Application* _ele_clone = new Application(e->f->copy(), e->var->copy());
+    e->remove();
+    
     std::vector< std::pair< Unknown*, Element* > > unkn2 = unknwons;
-    if (f->compare (e->f, unkn2) && var->compare(e->f, unkn2))
-      return true;
+    Application* result = new Application (f->compare (_ele_clone->f, unkn2), var->compare(_ele_clone->f, unkn2));
+    result->copy();
+    if (result->f && result->var) {
+      _ele->remove();
+      _ele = _ele_clone->copy();
+      return result->copy();
+    }
     else {
+      result->remove();
+      delete _ele_clone;
       Element* simplified = apply();
       if (simplified) {
-	bool result = simplified->compare(_ele, unknwons);
+	Element *result = simplified->compare(_ele, unknwons);
 	simplified->remove();
 	return result;
       }
       else {
 	Element *simplified2 = e->apply();
 	if (simplified2) {
-	  bool result = compare(simplified2, unknwons);
-	  simplified2->remove();
+	  Element *result = compare(simplified2, unknwons);
+	  _ele->remove();
+	  _ele = simplified2;	  
 	  return result;
 	}
 	else
@@ -158,7 +169,7 @@ bool Application::_compare(Element* _ele, std::vector< std::pair< Unknown*, Elem
   else {
     Element* simplified = apply();
     if (simplified) {
-      bool result = simplified->compare(_ele, unknwons);
+      Element *result = simplified->compare(_ele, unknwons);
       simplified->remove();
       return result;
     }

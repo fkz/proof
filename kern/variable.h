@@ -13,7 +13,7 @@ protected:
   virtual Element* step(int from);
   virtual Element* clone();
   virtual Element* applyRecursive();
-  virtual bool _compare(Element* _ele, std::vector< std::pair< Unknown*, Element* > > &unknwons);
+  virtual Element* _compare(Element*& _ele, std::vector< std::pair< Unknown*, Element* > > &unknwons);
   virtual bool equals(Element* ele2);
 public:
   Variable (int index, Element *type) : index(index), _type(type) { }

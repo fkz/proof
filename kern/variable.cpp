@@ -58,14 +58,13 @@ Element* Variable::applyRecursive()
 }
 
 
-bool Variable::_compare(Element* _ele, std::vector< std::pair< Unknown*, Element* > >& unknwons)
+Element* Variable::_compare(Element*& _ele, std::vector< std::pair< Unknown*, Element* > >& unknwons)
 {
   Variable* e = _ele->cast< Variable > ();
-  if (!e) return false;
+  if (!e) return 0;
   bool result = index == e->index;
   e->remove();
-  return result;
-  return equals(_ele);
+  return result ? copy() : 0;
 }
 
 

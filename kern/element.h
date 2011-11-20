@@ -74,10 +74,12 @@ public:
    * 
    * @p unkowns gives back approriate definitions for Unknwon values
    * 
-   * @returns true iff can be succesfully converted
+   * @returns an Element with approriate definitions of this; @p _ele is also updated to the new definitions
+   *          therefor, the _ele gets removed (if altered) and a new copy is given there
+   * so if you want to hold _ele, you'd have to @ref copy it first
    */
-  bool compare (Element *_ele, std::vector< std::pair< Unknown *, Element * > > &unknwons);
-  virtual bool _compare(Element* _ele, std::vector< std::pair< Unknown*, Element* > > &unknwons) = 0;
+    Element* compare (Element*& _ele, std::vector< std::pair< Unknown*, Element* > >& unknwons);
+  virtual Element *_compare(Element*& _ele, std::vector< std::pair< Unknown*, Element* > > &unknwons) = 0;
 
   ///Functions to do pretty printing
   virtual bool isUsed(int index) = 0;
@@ -108,7 +110,7 @@ public:
     virtual Element* replaceNamed(Element* with, int T1, void* T2) { return copy(); }
     virtual bool equals_really(Element* ele2) { return equals(ele2); } 
     virtual Element* applyRecursive() { return copy(); }
-    virtual bool _compare(Element* _ele, std::vector< std::pair< Unknown*, Element* > > &unknwons) { return equals (_ele); }
+    virtual Element *_compare(Element*& _ele, std::vector< std::pair< Unknown*, Element* > > &unknwons) { return equals (_ele) ? copy() : 0; }
     TheTypeOfAllTypesTM() {}
 };
 
@@ -129,6 +131,6 @@ public:
     virtual Element* replaceNamed(Element* with, int T1, void* T2) { return copy(); }
     virtual bool equals_really(Element* ele2) { return equals (ele2); }
     virtual Element* applyRecursive() { return copy(); }
-    virtual bool _compare(Element* _ele, std::vector< std::pair< Unknown*, Element* > > &unknwons) { return equals(_ele); }
+    virtual Element *_compare(Element*& _ele, std::vector< std::pair< Unknown*, Element* > > &unknwons) { return equals(_ele) ? copy() : 0; }
     Prop() {}  
 };

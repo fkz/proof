@@ -31,7 +31,11 @@ public:
   
   virtual Element* replaceNamed(Element* with, int T1, void* T2);
   
-  virtual bool _compare(Element* _ele, std::vector< std::pair< Unknown*, Element* > > &unknwons) {
-    return _ele->compare(this, unknwons);
+  virtual Element *_compare(Element*& _ele, std::vector< std::pair< Unknown*, Element* > > &unknwons) {
+    Element* thisC = copy();
+    Element* result = _ele->compare(thisC, unknwons);
+    _ele->remove();
+    _ele = result;
+    return thisC;
   }
 };
