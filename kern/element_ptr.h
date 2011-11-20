@@ -24,7 +24,7 @@ public:
   }
   
   ElementPtr &operator = (const ElementPtr &ptr2) {
-    //clearif (element) element->remove();
+    if (element) element->remove();
     element = ptr2.element;
     if (element) element->copy();
     return *this;

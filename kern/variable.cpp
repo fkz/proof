@@ -1,5 +1,6 @@
 #include "variable.h"
 #include "element_cast.h"
+#include "ext/unknown.h"
 
 Element* Variable::type()
 {
@@ -54,6 +55,20 @@ Element* Variable::step(int from)
 Element* Variable::applyRecursive()
 {
   return copy();
+}
+
+Element* Variable::compareType(Element* _type)
+{
+  Element* result = Element::compareType(_type);
+  if (result)
+    return result;
+  if (Unknown::isUnknown (this->_type)) {
+    this->_type->remove();
+    this->_type = _type->copy();
+    return copy();
+  }
+  else
+    return 0;
 }
 
 

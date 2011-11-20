@@ -16,6 +16,7 @@ protected:
   virtual Element* applyRecursive();
   Abstraction (Element *var, Element *term) : var(var), term(term) { }
   virtual bool check(std::vector< Element* >& vars);
+  virtual Element* compareType(Element* _type);
 public:
   Element *getVar() {
     return var->copy();

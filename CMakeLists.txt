@@ -4,7 +4,7 @@ add_definitions(-Wall -O3 -g)
 
 include_directories(.)
 
-set(CMAKE_BUILD_TYPE RelWithDebInfo)
+set(CMAKE_BUILD_TYPE Release)
 
 
 add_subdirectory(lang)

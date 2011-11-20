@@ -49,9 +49,18 @@ Element* Abstraction::replaceNamed(Element* with, int T1, void* T2)
     return copy();
   }
   else {
-    return _clone(newTerm, newVar)->copy();
+    Element* result = _clone(newTerm, newVar)->copy();
+    newTerm->remove();
+    newVar->remove();
+    return result;
   }
 }
+
+Element* Abstraction::compareType(Element* _type)
+{
+  
+}
+
 
 Element* Abstraction::applyRecursive()
 {
@@ -63,7 +72,10 @@ Element* Abstraction::applyRecursive()
     return copy();
   }
   else {
-    return _clone(newTerm, newVar)->copy();
+    Element* result = _clone(newTerm, newVar)->copy();
+    newTerm->remove();
+    newVar->remove();
+    return result;
   }
 }
 

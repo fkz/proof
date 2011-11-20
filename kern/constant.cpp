@@ -10,8 +10,12 @@ bool Constant::check(std::vector< Element* >& vars)
   if (unfold) {
     if (!unfold->check(vars2))
       return false;
-    if (!_type->equals(unfold->type()))
+    Element* unfold_type = unfold->type();
+    if (!_type->equals(unfold_type)) {
+      unfold_type->remove();
       return false;
+    }
+    unfold_type->remove();
   }
   return true;
 }

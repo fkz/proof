@@ -7,6 +7,7 @@
 #include "Parserbase.h"
 #include "kern/element_ptr.h"
 #include "kern/element_ptr.ext.h"
+#include "lex.h"
 
 
 #undef Parser
@@ -14,7 +15,7 @@ class Parser: public ParserBase
 {
         
     public:
-      Parser (std::istream &str) : stream (str), lex_front(0) { };  
+      Parser (std::istream &str) : lexer (str), lex_front(0) { };  
       
       int parse();
       ElementPtr buildForAlls(ElementPtr &vars, ElementPtr &aussage);
@@ -23,10 +24,10 @@ class Parser: public ParserBase
       void set (const std::string &name, ElementPtr ele, ElementPtr type = ElementPtr(), bool unfoldable = false);
 
     private:
+      Lexer lexer;
       std::map< std::string, ElementPtr > eles;
       std::vector< std::string > names;
       int lex_front;
-      std::istream &stream;
       std::string literal (ElementPtr ptr);
       
         void error(char const *msg);    // called on (syntax) errors

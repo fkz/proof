@@ -61,6 +61,7 @@ public:
   ///For the conversion phase, this replacements can be used (not used in any checking)
   virtual Element *replaceNamed (Element *with, int T1, void *T2) = 0;
   
+  virtual Element *compareType (Element *_type);
   
   ///Functions to do pretty printing
   virtual bool isUsed(int index) = 0;

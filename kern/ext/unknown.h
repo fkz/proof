@@ -12,4 +12,8 @@ public:
   virtual Element* type() {
     return copy();
   }
+  
+  static bool isUnknown (Element *ele) {
+    return dynamic_cast< Unknown * > (ele);
+  }
 };

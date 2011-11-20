@@ -8,5 +8,5 @@ ADD_CUSTOM_COMMAND(
    COMMAND bisonc++ -V -H "kern/element_ptr.h" ${CMAKE_CURRENT_SOURCE_DIR}/grammar.y
    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/grammar.y) # ${CMAKE_CURRENT_SOURCE_DIR}/expression.h)
 
-ADD_EXECUTABLE(parser Parser.cpp parse.cc main.cpp)
+ADD_EXECUTABLE(parser Parser.cpp parse.cc lex.cpp main.cpp)
 target_link_libraries(parser kern)
