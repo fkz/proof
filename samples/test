@@ -3,6 +3,7 @@ False := (A: Set) -> A;
 True := (A: Set) -> A -> A;
 print Set;
 I: True := A a => a;
+print ? I;
 Not := (X: Set) => X -> False;
 
 print Not;
@@ -56,7 +57,7 @@ exp: nat -> nat -> nat := (a: nat) (b: nat) => b nat ((q: nat) => mul q a) 1;
 p10: nat -> nat -> nat := (a b: nat) => add (mul zehn a) b;
 
 ZZ : nat := (p10 (p10 9 9) 9);
-jahn : nat -> nat := ZZ;
+jahn : nat -> nat := f => ZZ;
 
 
 

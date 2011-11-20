@@ -62,8 +62,9 @@ Element* Application::replaceNamed(Element* with, int T1, void* T2)
 
 Application::~Application()
 {
-  f->remove();
-  var->remove();
+  //TODO: if's are only used in _compare, maybe code should be there
+  if(f)f->remove();
+  if(var)var->remove();
 }
 
 Element* Application::step(int from)

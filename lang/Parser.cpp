@@ -5,10 +5,11 @@
 #include "additional_elements.h"
 #include <kern/constant.h>
 #include "lex.h"
+#include <kern/ext/dummy.h>
 
 int Parser::lex()
 {
-  lexer.lex(d_val__); 
+  lexer.lex(d_val__);
 }
 
 ElementPtr Parser::evaluate(const std::string& string)
@@ -74,29 +75,32 @@ ElementPtr Parser::buildFunctions(ElementPtr& vars, ElementPtr& aussage)
 
 void Parser::doChecking(ElementPtr& type, ElementPtr& term, const std::string &str)
 {
-  ElementPtr term_type = term->type();
   std::vector< std::pair< Unknown *, Element * > > unknowns;
-  Element *type_ = type->copy();
-  term_type = term_type->compare(type_, unknowns);
-  type = type_;
-  if (!&*term_type) {
+  Element *type_ = (new Dummy(type->copy()))->copy();
+  term = term->compare(type_, unknowns);
+  type = type_->type();
+  type_->remove();
+  if (!&*term) {
     std::cerr << "Comparing fails (defining " << str << ")" << std::endl;
   }
 
   for (std::vector< std::pair< Unknown*, Element* > >::iterator it = unknowns.begin(); it != unknowns.end(); ++it) {
-    term = term->replaceNamed(it->second, Unknown::REPLACE_ELEMENT, it->first);
     (ElementPtr)it->first;
     (ElementPtr)it->second;
   }
   
-  bool r = true;
-  if (!term->check()) { r = false; std::cerr << "error defining " << str << std::endl; }
-  if (!type->check()) { r = false;std::cerr << "error defining " << str << "(wrong type)" << std::endl; }
-  term_type = term->type();
-  if (r && !term_type->equals_really(&*type)) { 
-    r = false;std::cerr << "error defining " << str << "(types differ)" << std::endl; 
-    Creater::print(term_type);
-    Creater::print(type);
+  bool r = &*term;
+  if (r) {
+    if (!term->check()) { r = false; std::cerr << "error defining " << str << std::endl; }
+    if (!type->check()) { r = false;std::cerr << "error defining " << str << "(wrong type)" << std::endl; }
+    ElementPtr term_type = term->type();
+    term_type = term->type();
+    if (r && !term_type->equals_really(&*type)) { 
+      r = false;
+      std::cerr << "error defining " << str << "(types differ)" << std::endl; 
+      Creater::print(term_type);
+      Creater::print(type);
+    }
   }
   
   if (r)  set (str, term, type);  
