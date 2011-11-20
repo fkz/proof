@@ -5,6 +5,7 @@
 #include "abstraction.h"
 #include "variable.h"
 #include "ext/named_var.h"
+#include <sstream>
 
 
 namespace Creater{
@@ -59,5 +60,17 @@ void print (ElementPtr ele) {
     std::cout << std::endl;
   }
 }
+
+std::string printex (ElementPtr ele) {
+  std::stringstream stream;
+  std::vector< std::string > strings;
+  ele->toString (stream, strings, false);
+  return stream.str();
+}
   
 };
+
+std::string p (Element *ele) {
+  ElementPtr ppp (ele->copy());
+  return Creater::printex(ppp);
+}

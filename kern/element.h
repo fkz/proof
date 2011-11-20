@@ -5,6 +5,8 @@
 #include <typeinfo>
 #include <cassert>
 
+class Unknown;
+
 /**
  * @class Element
  * Represents a syntactic element in the tree
@@ -13,7 +15,7 @@
 class Element {
 private:
   int refCount;
-public:
+  public:
   Element *copy () {
     ++refCount;
     return this;
@@ -54,15 +56,29 @@ public:
   virtual Element *step (int from) = 0;
   virtual Element *replace (Element *with, int varId) = 0;
   /// Should return the same element (of cause @ref refCount is different)
-  virtual Element *clone() = 0;  
+  //virtual Element *clone() = 0;  
   virtual Element *type() = 0;
   virtual bool equals (Element *ele2) = 0;
   
   ///For the conversion phase, this replacements can be used (not used in any checking)
+  /**
+   * @p with the element, appropriate elements should be replaced with
+   * @p T1 specifies an integer, which data types to replace
+   * @p T2 the data which specifies the objects which are to replace, depends on T1
+   */
   virtual Element *replaceNamed (Element *with, int T1, void *T2) = 0;
   
-  virtual Element *compareType (Element *_type);
-  
+  /**
+   * compares the two Elements
+   * replaces Unknown's with approriate other definitions
+   * 
+   * @p unkowns gives back approriate definitions for Unknwon values
+   * 
+   * @returns true iff can be succesfully converted
+   */
+  bool compare (Element *_ele, std::vector< std::pair< Unknown *, Element * > > &unknwons);
+  virtual bool _compare(Element* _ele, std::vector< std::pair< Unknown*, Element* > > &unknwons) = 0;
+
   ///Functions to do pretty printing
   virtual bool isUsed(int index) = 0;
   virtual void toString (std::ostream &stream, std::vector< std::string > &stringMapping, bool klammern) = 0;
@@ -92,6 +108,7 @@ public:
     virtual Element* replaceNamed(Element* with, int T1, void* T2) { return copy(); }
     virtual bool equals_really(Element* ele2) { return equals(ele2); } 
     virtual Element* applyRecursive() { return copy(); }
+    virtual bool _compare(Element* _ele, std::vector< std::pair< Unknown*, Element* > > &unknwons) { return equals (_ele); }
     TheTypeOfAllTypesTM() {}
 };
 
@@ -112,5 +129,6 @@ public:
     virtual Element* replaceNamed(Element* with, int T1, void* T2) { return copy(); }
     virtual bool equals_really(Element* ele2) { return equals (ele2); }
     virtual Element* applyRecursive() { return copy(); }
+    virtual bool _compare(Element* _ele, std::vector< std::pair< Unknown*, Element* > > &unknwons) { return equals(_ele); }
     Prop() {}  
 };

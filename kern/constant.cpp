@@ -20,6 +20,7 @@ bool Constant::check(std::vector< Element* >& vars)
   return true;
 }
 
+
 Element* Constant::clone() {
   return new Constant (unique_id, _type->copy(), str, unfold ? unfold->copy() : 0);
 }
@@ -43,6 +44,28 @@ bool Constant::equals(Element* ele2) {
       return false;
   }
 }
+
+bool Constant::_compare(Element* _ele, std::vector< std::pair< Unknown*, Element* > >& unknwons)
+{
+  Constant *ele = _ele->cast<Constant> ();
+  if (!ele) {
+    if (unfold)
+      return unfold->compare(_ele, unknwons);
+    else
+      return false;
+  }
+  else {
+    if (ele->unique_id == unique_id)
+      return true;
+    if (unfold)
+      return unfold->compare(_ele, unknwons);
+    else if (ele->unfold)
+      return ele->unfold->compare(this, unknwons);
+    else
+      return false;
+  }
+}
+
 
 Element* Constant::applyRecursive()
 {

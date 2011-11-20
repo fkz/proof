@@ -47,6 +47,16 @@ public:
       result->list.push_back(std::make_pair (*it, ele));
     return result;
   }
+  static ArgumentList *createManyUnknowns (ElementPtr litList) {
+    ArgumentList *result = new ArgumentList();
+    result->copy();
+    LiteralList *ll = dynamic_cast< LiteralList * > (&*litList);
+    for (std::list< std::string >::const_iterator it = ll->list.begin(); it != ll->list.end(); ++it)
+      result->list.push_back(std::make_pair (*it, Creater::unknown()));
+    return result;
+  }
+  
+  
   static ElementPtr push (ElementPtr pt1, ElementPtr pt2) {
     ArgumentList* e1 = dynamic_cast< ArgumentList * > (&*pt1);
     ArgumentList* e2 = dynamic_cast< ArgumentList * > (&*pt2);

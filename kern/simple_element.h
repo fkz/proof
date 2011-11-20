@@ -6,7 +6,14 @@ class SimpleElement: public Element {
     return false;
   }
   virtual bool equals(Element* ele2) {
-    return typeid(*ele2) == typeid(*this);
+    SimpleElement* ele2ex = ele2->cast< SimpleElement > ();
+    if (ele2ex) {
+      bool result = typeid(*ele2ex) == typeid(*this);
+      ele2ex->remove();
+      return result;
+    }
+    else
+      return 0;
   }
   virtual bool isUsed(int index) {
     return false;
@@ -22,5 +29,8 @@ class SimpleElement: public Element {
   }
   virtual Element* applyRecursive() {
     return copy();
+  }
+  virtual bool _compare(Element* _ele, std::vector< std::pair< Unknown*, Element* > > &unknwons) {
+    return equals(_ele);
   }
 };

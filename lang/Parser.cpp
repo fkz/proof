@@ -70,3 +70,32 @@ ElementPtr Parser::buildFunctions(ElementPtr& vars, ElementPtr& aussage)
   }
   return fun;
 }
+
+
+void Parser::doChecking(ElementPtr& type, ElementPtr& term, const std::string &str)
+{
+  ElementPtr term_type = term->type();
+  std::vector< std::pair< Unknown *, Element * > > unknowns;
+  if (!term_type->compare(&*type, unknowns)) {
+    std::cerr << "Comparing fails (defining " << str << ")" << std::endl;
+  }
+
+  for (std::vector< std::pair< Unknown*, Element* > >::iterator it = unknowns.begin(); it != unknowns.end(); ++it) {
+    type = type->replaceNamed(it->second, Unknown::REPLACE_ELEMENT, it->first);
+    term = term->replaceNamed(it->second, Unknown::REPLACE_ELEMENT, it->first);
+    (ElementPtr)it->first;
+    (ElementPtr)it->second;
+  }
+  
+  bool r = true;
+  if (!term->check()) { r = false; std::cerr << "error defining " << str << std::endl; }
+  if (!type->check()) { r = false;std::cerr << "error defining " << str << "(wrong type)" << std::endl; }
+  term_type = term->type();
+  if (r && !term_type->equals_really(&*type)) { 
+    r = false;std::cerr << "error defining " << str << "(types differ)" << std::endl; 
+    Creater::print(term_type);
+    Creater::print(type);
+  }
+  
+  if (r)  set (str, term, type);  
+}

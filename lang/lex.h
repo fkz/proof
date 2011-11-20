@@ -12,4 +12,5 @@ private:
   std::list< std::pair< int, ElementPtr > > nextTokens;
   std::istream &stream;
   int lex_front;
+  int line;
 };

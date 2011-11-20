@@ -1,7 +1,8 @@
 // Wahrheitswerte
 False := (A: Set) -> A;
 True := (A: Set) -> A -> A;
-I: True := (A: Set) (a: A) => a;
+print Set;
+I: True := A a => a;
 Not := (X: Set) => X -> False;
 
 print Not;

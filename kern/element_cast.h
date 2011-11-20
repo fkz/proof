@@ -1,3 +1,4 @@
+#pragma once
 #include "element.h"
 
 template< class T >

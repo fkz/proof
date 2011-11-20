@@ -129,6 +129,43 @@ bool Application::equals(Element* ele2)
     return equals_ex(ele2);
 }
 
+bool Application::_compare(Element* _ele, std::vector< std::pair< Unknown*, Element* > >& unknwons)
+{
+  Application *e = _ele->cast< Application > ();
+  if (e) {
+    std::vector< std::pair< Unknown*, Element* > > unkn2 = unknwons;
+    if (f->compare (e->f, unkn2) && var->compare(e->f, unkn2))
+      return true;
+    else {
+      Element* simplified = apply();
+      if (simplified) {
+	bool result = simplified->compare(_ele, unknwons);
+	simplified->remove();
+	return result;
+      }
+      else {
+	Element *simplified2 = e->apply();
+	if (simplified2) {
+	  bool result = compare(simplified2, unknwons);
+	  simplified2->remove();
+	  return result;
+	}
+	else
+	  return false;
+      }
+    }
+  }
+  else {
+    Element* simplified = apply();
+    if (simplified) {
+      bool result = simplified->compare(_ele, unknwons);
+      simplified->remove();
+      return result;
+    }
+  }
+}
+
+
 bool Application::equals_ex(Element* ele2)
 {
   Element *simplified = apply();

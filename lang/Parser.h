@@ -22,6 +22,8 @@ class Parser: public ParserBase
       ElementPtr buildFunctions(ElementPtr &vars, ElementPtr &aussage);
       ElementPtr evaluate (const std::string &string);
       void set (const std::string &name, ElementPtr ele, ElementPtr type = ElementPtr(), bool unfoldable = false);
+      
+      void doChecking (ElementPtr& type, ElementPtr& term, const std::string& str);
 
     private:
       Lexer lexer;
@@ -50,6 +52,8 @@ inline void Parser::error(char const *msg)
 
 // $insert print
 inline void Parser::print()
-{}
+{
+  
+}
 
 #endif

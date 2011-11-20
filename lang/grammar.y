@@ -12,16 +12,14 @@
 
 definitions: 
 | definitions literal ZUWEISUNG aussage ';' { if (!$4->check()) { std::cerr << "error defining " << Literal::from ($2) << std::endl; } set (Literal::from ($2), $4); }
-| definitions literal ':' ZUWEISUNG aussage ';' { if (!$5->check()) { std::cerr << "error defining " << Literal::from ($2) << std::endl; } set (Literal::from ($2), $5, 0, true); }
+| definitions literal ':' ZUWEISUNG aussage ';' {
+ if (!$5->check()) { std::cerr << "error defining " << Literal::from ($2) << std::endl; } set (Literal::from ($2), $5, 0, true); 
+}
 | definitions literal ':' aussage ';' { if (!$4->check()) { std::cerr << "error defining axiom " << Literal::from ($2) << std::endl; } set (Literal::from($2), 0, $4, true); }
 | definitions PRINT aussage ';' { Creater::print($3); }
 | definitions PRINT '?' aussage ';' { if ($4->check()) { Creater::print ($4->applyRecursive()); } }
 | definitions literal ':' aussage ZUWEISUNG aussage ';' {
-  if (!$6->check()) { std::cerr << "error defining " << Literal::from ($2) << " (no valid definition)" << std::endl; }
-  if (!$4->check()) { std::cerr << "error defining " << Literal::from ($2) << " (no valid type)" << std::endl; }
-  ElementPtr tt;
-  if ($6->check() && $4->check() && !$4->equals_really(&*(tt = $6->type()))) { std::cerr << "error defining " << Literal::from ($2) << " (types differ)" << std::endl; }
-  else set (Literal::from ($2), $6, $4);
+  doChecking ($4, $6, Literal::from ($2));
 }
 | definitions LITERAL '?' aussage '?' aussage ';' { 
   if (!$4->check()) { std::cerr << "error comparing " << Literal::from ($2) << " (left side wrong)" << std::endl; }
@@ -71,7 +69,7 @@ variable1: aussage1 { $$ = ArgumentList::create ("_", $1); }
 | variable { $$ = $1; }
 ;
 
-variable2: literal_list { $$ = ArgumentList::createMany ($1, Creater::unknown()); }
+variable2: literal_list { $$ = ArgumentList::createManyUnknowns ($1); }
 | variable { $$ = $1; }
 ;
 

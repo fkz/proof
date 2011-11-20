@@ -11,6 +11,7 @@ public:
   Constant (int unique, Element *type, const std::string &str, Element *unfold = 0) 
   : unique_id(unique), _type(type), unfold(unfold), str(str) { }
   
+  virtual bool _compare(Element* _ele, std::vector< std::pair< Unknown*, Element* > > &unknwons);
   virtual bool check(std::vector< Element* >& vars);
   virtual Element* applyRecursive();
   virtual Element* clone();

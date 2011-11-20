@@ -3,9 +3,9 @@
 #include "additional_elements.h"
 
 Lexer::Lexer(std::istream& stream)
-: stream(stream), lex_front(0)
+: stream(stream), lex_front(0), line(0)
 {
-
+  
 }
 
 
@@ -38,9 +38,10 @@ int Lexer::nextToken(ElementPtr& d_val__, bool simple)
     int l2 = 0;
     
     switch (l1) {
+      case '\n':
+	++line;
       case ' ':
       case '\t':
-      case '\n':
       case '\r':
 	continue;
       case '/':

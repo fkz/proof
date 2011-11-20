@@ -1,5 +1,7 @@
 #include "abstraction.h"
 #include "element_cast.h"
+#include "ext/named_var.h"
+#include <vector>
 
 Element* Abstraction::step(int from)
 {
@@ -56,11 +58,6 @@ Element* Abstraction::replaceNamed(Element* with, int T1, void* T2)
   }
 }
 
-Element* Abstraction::compareType(Element* _type)
-{
-  
-}
-
 
 Element* Abstraction::applyRecursive()
 {
@@ -102,6 +99,45 @@ bool Abstraction::equals(Element* ele2)
   e->remove();
   return result;
 }
+
+
+struct Error {
+public:
+  bool operator == (const Error &err2) { return false; }  
+};
+
+std::ostream &operator << (std::ostream &stream, const Error &) { stream << "ERROR_PLEASE_REPORT"; return stream; }
+
+
+
+bool Abstraction::_compare(Element* _ele, std::vector< std::pair< Unknown*, Element* > >& unknwons)
+{
+  Abstraction *e = _ele->cast< Abstraction > ();
+  if (!e)
+    return false;
+
+  bool result1 = var->compare(e->var, unknwons);
+  if (!result1)
+    return false;
+  
+  for (std::vector< std::pair< Unknown*, Element* > >::iterator it = unknwons.begin(); it != unknwons.end(); ++it) {
+    Element* t = it->second->step(0);
+    it->second->remove();
+    it->second = t;
+  }
+  bool result = term->compare(e->term, unknwons);
+  Element *error = new NamedVar<Error>(Error());
+  error->copy();
+  for (std::vector< std::pair< Unknown*, Element* > >::iterator it = unknwons.begin(); it != unknwons.end(); ++it) {
+    Element* t = it->second->replace(error, 0);
+    it->second->remove();;
+    it->second = t;
+  }
+  e->remove();
+  error->remove();
+  return result;
+}
+
 
 bool Abstraction::check(std::vector< Element* >& vars)
 {

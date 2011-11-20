@@ -1,6 +1,6 @@
 project(my_proof)
 
-add_definitions(-Wall -O3 -g)
+add_definitions(-Wall -O0 -g)
 
 include_directories(.)
 

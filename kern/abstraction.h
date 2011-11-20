@@ -6,6 +6,7 @@ private:
   Element *var;
   Element *term;
 protected:
+  virtual bool _compare(Element* _ele, std::vector< std::pair< Unknown*, Element* > > &unknwons);
   virtual Element* replace(Element* with, int varId);
   virtual Element* replaceNamed(Element* with, int T1, void* T2);
   virtual Element* step(int from);
@@ -16,7 +17,6 @@ protected:
   virtual Element* applyRecursive();
   Abstraction (Element *var, Element *term) : var(var), term(term) { }
   virtual bool check(std::vector< Element* >& vars);
-  virtual Element* compareType(Element* _type);
 public:
   Element *getVar() {
     return var->copy();

@@ -57,19 +57,17 @@ Element* Variable::applyRecursive()
   return copy();
 }
 
-Element* Variable::compareType(Element* _type)
+
+bool Variable::_compare(Element* _ele, std::vector< std::pair< Unknown*, Element* > >& unknwons)
 {
-  Element* result = Element::compareType(_type);
-  if (result)
-    return result;
-  if (Unknown::isUnknown (this->_type)) {
-    this->_type->remove();
-    this->_type = _type->copy();
-    return copy();
-  }
-  else
-    return 0;
+  Variable* e = _ele->cast< Variable > ();
+  if (!e) return false;
+  bool result = index == e->index;
+  e->remove();
+  return result;
+  return equals(_ele);
 }
+
 
 
 Element* Variable::clone()
